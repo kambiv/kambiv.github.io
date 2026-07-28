@@ -3,4 +3,4 @@
 ### Software Engineer & Graphic Designer
 
 
-## Updating the my portfolio is underway
+Currently updating my portfolio.
