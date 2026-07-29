@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Victor Kambi — Design & Software Engineer</title>
+<meta name="description" content="Portfolio of Victor Kambi, Design & Software Engineer building backend systems and design systems in Kenya.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-elevated:#FFFFFF;
+    --text:#000000;
+    --text-muted:rgba(0,0,0,.55);
+    --border:rgba(0,0,0,.12);
+    --accent:rgba(0,0,0,.5);
+    --accent-soft:rgba(0,0,0,.08);
+    --font-sans:'Inter',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#000000;
+      --bg-elevated:#111111;
+      --text:#FFFFFF;
+      --text-muted:rgba(255,255,255,.55);
+      --border:rgba(255,255,255,.14);
+      --accent:rgba(255,255,255,.5);
+      --accent-soft:rgba(255,255,255,.08);
+    }
+  }
+  /* Manual override always wins over system preference */
+  html.dark{
+    --bg:#000000;
+    --bg-elevated:#111111;
+    --text:#FFFFFF;
+    --text-muted:rgba(255,255,255,.55);
+    --border:rgba(255,255,255,.14);
+    --accent:rgba(255,255,255,.5);
+    --accent-soft:rgba(255,255,255,.08);
+  }
+  html.light{
+    --bg:#FFFFFF;
+    --bg-elevated:#FFFFFF;
+    --text:#000000;
+    --text-muted:rgba(0,0,0,.55);
+    --border:rgba(0,0,0,.12);
+    --accent:rgba(0,0,0,.5);
+    --accent-soft:rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box;}
+  html{font-size:16px;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-sans);
+    font-weight:500;
+    font-size:0.875rem; /* ~ Tailwind text-sm */
+    line-height:1.6;
+    transition:background .25s ease, color .25s ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--accent-soft);color:var(--accent);}
+
+  .wrap{
+    max-width:36.25rem;
+    margin:0 auto;
+    padding:0 1.5rem;
+  }
+
+  /* Identity block */
+  .identity{
+    padding-top:3rem;
+  }
+  .name{
+    font-size:0.9375rem;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0 0 0.125rem;
+  }
+  .role{
+    font-size:0.9375rem;
+    font-weight:500;
+    color:var(--text-muted);
+    margin:0 0 1.75rem;
+  }
+  .role a{color:var(--accent);border-bottom:1px solid var(--accent-soft);}
+  .role a:hover{border-bottom-color:var(--accent);}
+
+  /* Nav row */
+  nav.site{
+    display:flex;
+    align-items:center;
+    gap:1.125rem;
+    padding:1rem 0;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    margin-bottom:0.5rem;
+    font-size:0.84375rem;
+    color:var(--text-muted);
+  }
+  nav.site a{transition:color .15s ease;cursor:pointer;}
+  nav.site a:hover, nav.site a.active{color:var(--text);}
+  nav.site .spacer{flex:1;}
+  #theme-toggle{
+    background:none;
+    border:1px solid var(--border);
+    border-radius:1.25rem;
+    width:2.375rem;height:1.3125rem;
+    position:relative;
+    cursor:pointer;
+    padding:0;
+    flex-shrink:0;
+  }
+  #theme-toggle::after{
+    content:'';
+    position:absolute;
+    top:0.125rem;left:0.125rem;
+    width:0.9375rem;height:0.9375rem;
+    border-radius:50%;
+    background:var(--accent);
+    transition:transform .2s ease;
+  }
+  html.dark #theme-toggle::after{transform:translateX(1.0625rem);}
+
+  /* Tab panels */
+  .tab-panel{padding:2.25rem 0 0;}
+  .tab-panel.hidden-panel{display:none;}
+  .tab-panel.slide-in{animation:slideIn .4s cubic-bezier(.22,1,.36,1);}
+  @keyframes slideIn{
+    from{opacity:0; transform:translateX(1rem);}
+    to{opacity:1; transform:translateX(0);}
+  }
+  #work{padding-bottom:3.5rem;}
+  #experience{padding-bottom:3.5rem;}
+  #about{padding-bottom:3.5rem;}
+  #contact{padding-bottom:3.5rem;}
+
+  .section-title{
+    font-size:0.75rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--text-muted);
+    margin:0 0 0.25rem;
+  }
+
+  /* Work list — Gavin-style stacked link rows */
+  .hover-list{position:relative;}
+  .hover-highlight{
+    position:absolute;
+    left:0;top:0;
+    width:0;height:0;
+    background:var(--bg-elevated);
+    border-radius:0.875rem;
+    box-shadow:0 4px 16px rgba(0,0,0,.10), 0 1px 3px rgba(0,0,0,.08);
+    opacity:0;
+    pointer-events:none;
+    z-index:0;
+    transition:
+      transform .55s cubic-bezier(.34,1.56,.64,1),
+      width .55s cubic-bezier(.34,1.56,.64,1),
+      height .55s cubic-bezier(.34,1.56,.64,1),
+      opacity .2s ease;
+  }
+  html.dark .hover-highlight{
+    box-shadow:0 4px 18px rgba(0,0,0,.45), 0 1px 3px rgba(0,0,0,.35);
+  }
+  .row{
+    position:relative;
+    z-index:1;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:1rem;
+    padding:0.875rem 0.75rem;
+    margin:0 -0.75rem;
+    border-bottom:1px solid var(--border);
+  }
+  .row:last-child{border-bottom:none;}
+  a.row{cursor:pointer;}
+  a.row:hover .title{color:var(--accent);}
+  .row .title{
+    font-size:0.9375rem;
+    font-weight:500;
+    color:var(--text);
+    transition:color .15s ease;
+  }
+  .row .meta{
+    font-size:0.8125rem;
+    color:var(--text-muted);
+    margin-top:0.125rem;
+  }
+  .row .year{
+    font-size:0.78125rem;
+    color:var(--text-muted);
+    white-space:nowrap;
+    flex-shrink:0;
+  }
+
+  /* Compact work rows: box hugs the title text, no divider */
+  .row-compact{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:0.1875rem;
+    width:max-content;
+    max-width:100%;
+    justify-content:normal;
+    border-bottom:none;
+    padding:0.5rem 0.75rem;
+    margin:0.125rem -0.75rem;
+  }
+  .row-compact .year{
+    flex-shrink:initial;
+    white-space:normal;
+  }
+
+  /* About */
+  #about p{
+    max-width:54ch;
+    margin:0 0 0.875rem;
+  }
+  #about p:last-child{margin-bottom:0;}
+  #about .skills-line{
+    font-size:0.875rem;
+    color:var(--text-muted);
+  }
+  #about .skills-line b{color:var(--text);font-weight:600;}
+
+  .edu-row{
+    display:flex;
+    justify-content:space-between;
+    gap:1rem;
+    font-size:0.875rem;
+    padding:0.5rem 0;
+  }
+  .edu-row .school{color:var(--text-muted);}
+  .edu-row .yr{
+    font-size:0.78125rem;
+    color:var(--text-muted);
+    white-space:nowrap;
+  }
+
+  /* Contact */
+  #contact .row .title{font-size:0.90625rem;}
+  #contact .row:hover .title{color:var(--accent);}
+
+  footer{
+    padding:1.5rem 0 3rem;
+    font-size:0.78125rem;
+    color:var(--text-muted);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:1rem;
+  }
+  #local-time{font-variant-numeric:tabular-nums;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important;animation:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="identity">
+    <p class="name">Victor Kambi</p>
+    <p class="role">Design &amp; Software Engineer at <a href="#work">Tajji Real Estate</a></p>
+  </div>
+
+  <nav class="site">
+    <a data-tab="work" class="active">Work</a>
+    <a data-tab="experience">Experience</a>
+    <a data-tab="about">About</a>
+    <a data-tab="contact">Contact</a>
+    <span class="spacer"></span>
+    <button id="theme-toggle" aria-label="Toggle dark mode"></button>
+  </nav>
+
+  <section id="work" class="tab-panel hover-list">
+    <p class="section-title">Work</p>
+    <a class="row row-compact" href="#" target="_blank" rel="noopener">
+      <span class="title">BomaOS Console</span>
+      <span class="year">2026</span>
+    </a>
+    <a class="row row-compact" href="#" target="_blank" rel="noopener">
+      <span class="title">Jirani Portal</span>
+      <span class="year">2026</span>
+    </a>
+    <a class="row row-compact" href="https://www.canva.com/design/DAHBHEFMHdI/AhBAxnrkOYuX81kXOo3HcA/view" target="_blank" rel="noopener">
+      <span class="title">Tajji Investor Deck pre-seed round</span>
+      <span class="year">2026</span>
+    </a>
+    <a class="row row-compact" href="https://play.google.com/store/apps/details?id=io.tajji.bomaos" target="_blank" rel="noopener">
+      <span class="title">BomaOS Mobile v1.0</span>
+      <span class="year">2025</span>
+    </a>
+    <a class="row row-compact" href="https://www.tajji.com" target="_blank" rel="noopener">
+      <span class="title">Tajji Website Revamped</span>
+      <span class="year">2025</span>
+    </a>
+    <a class="row row-compact" href="https://github.com/kambiv/Walenje" target="_blank" rel="noopener">
+      <span class="title">Walenje Mobile Pre-Alpha</span>
+      <span class="year">2025</span>
+    </a>
+  </section>
+
+  <section id="experience" class="tab-panel hidden-panel">
+    <p class="section-title">Experience</p>
+    <div class="row">
+      <div>
+        <div class="title">Software &amp; Design Engineer</div>
+        <div class="meta">Tajji Real Estate Ltd, Eldoret</div>
+      </div>
+      <div class="year">2024–Now</div>
+    </div>
+    <div class="row">
+      <div>
+        <div class="title">Frontend Engineer &amp; Junior Designer</div>
+        <div class="meta">Tajji Real Estate Ltd, Nairobi</div>
+      </div>
+      <div class="year">2023–2024</div>
+    </div>
+    <div class="row">
+      <div>
+        <div class="title">Frontend Engineer Intern</div>
+        <div class="meta">Emmerce Ltd, Nairobi</div>
+      </div>
+      <div class="year">2022</div>
+    </div>
+  </section>
+
+  <section id="about" class="tab-panel hidden-panel">
+    <p class="section-title">About</p>
+    <p>
+      Currently at Tajji, helping shape the future of real estate in Africa — building design
+      systems, apps, the website, and onboarding flows.
+    </p>
+    <p>
+      Previously at Emmerce, I worked on marketing, web apps, and advertisement campaigns.
+    </p>
+    <p>
+      Beyond work, I like to draw, read philosophy, and review films.
+    </p>
+    <p>
+      BSc Computer Science, Moi University (2018–2023). Completing the UX Design pathway
+      with IBM SkillsBuild. Based in Eldoret, Kenya — Swahili and English.
+    </p>
+    <p class="skills-line">
+      <b>Languages</b> Kotlin, Java, TypeScript, Swift, SQL &nbsp;·&nbsp;
+      <b>Backend</b> Spring Boot, PostgreSQL, Docker, Kubernetes &nbsp;·&nbsp;
+      <b>Frontend</b> React, Next.js, SvelteKit, Tailwind &nbsp;·&nbsp;
+      <b>Design</b> Figma, design systems, prototyping, accessibility
+    </p>
+  </section>
+
+  <section id="contact" class="tab-panel hidden-panel">
+    <p class="section-title">Contact</p>
+    <a class="row" href="mailto:dev.kambi@gmail.com">
+      <div class="title">Email</div>
+      <div class="year">dev.kambi@gmail.com</div>
+    </a>
+    <a class="row" href="https://github.com/kambiv" target="_blank" rel="noopener">
+      <div class="title">GitHub</div>
+      <div class="year">github.com/kambiv</div>
+    </a>
+    <a class="row" href="https://kambiv.github.io" target="_blank" rel="noopener">
+      <div class="title">Portfolio</div>
+      <div class="year">kambiv.github.io</div>
+    </a>
+  </section>
+
+  <footer>
+    <div>© 2026 Victor Kambi</div>
+    <div id="local-time"></div>
+  </footer>
+
+</div>
+
+<script>
+  const toggle = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  const media = window.matchMedia('(prefers-color-scheme: dark)');
+
+  // Start in whichever mode the system is currently in
+  root.classList.add(media.matches ? 'dark' : 'light');
+
+  // Keep following the system, unless the visitor has clicked the toggle
+  let manualOverride = false;
+  media.addEventListener('change', (e) => {
+    if (manualOverride) return;
+    root.classList.remove('dark', 'light');
+    root.classList.add(e.matches ? 'dark' : 'light');
+  });
+
+  toggle.addEventListener('click', () => {
+    manualOverride = true;
+    root.classList.toggle('dark');
+    root.classList.toggle('light');
+  });
+
+  // Gavin-style hover highlight: a box that glides between list rows
+  document.querySelectorAll('.hover-list').forEach((container) => {
+    const highlight = document.createElement('div');
+    highlight.className = 'hover-highlight';
+    container.prepend(highlight);
+
+    const rows = container.querySelectorAll('.row');
+
+    rows.forEach((row) => {
+      row.addEventListener('mouseenter', () => {
+        highlight.style.width = row.offsetWidth + 'px';
+        highlight.style.height = row.offsetHeight + 'px';
+        highlight.style.transform = `translate(${row.offsetLeft}px, ${row.offsetTop}px)`;
+        highlight.style.opacity = '1';
+      });
+    });
+
+    container.addEventListener('mouseleave', () => {
+      highlight.style.opacity = '0';
+    });
+  });
+
+  // Tabbed nav: one panel visible at a time, sliding in on switch
+  const navLinks = document.querySelectorAll('nav.site a[data-tab]');
+  const panels = document.querySelectorAll('.tab-panel');
+
+  navLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const targetId = link.dataset.tab;
+      if (link.classList.contains('active')) return;
+
+      navLinks.forEach((l) => l.classList.toggle('active', l === link));
+
+      panels.forEach((panel) => {
+        if (panel.id === targetId) {
+          panel.classList.remove('hidden-panel', 'slide-in');
+          void panel.offsetWidth; // restart animation
+          panel.classList.add('slide-in');
+        } else {
+          panel.classList.add('hidden-panel');
+          panel.classList.remove('slide-in');
+        }
+      });
+    });
+  });
+  // Live clock — Victor's local time, Africa/Nairobi (UTC+3)
+  const timeEl = document.getElementById('local-time');
+  const clockFormatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Africa/Nairobi',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+  function updateClock() {
+    timeEl.textContent = `${clockFormatter.format(new Date())} UTC-3`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>
