@@ -129,10 +129,15 @@
   /* Tab panels */
   .tab-panel{padding:2.25rem 0 0;}
   .tab-panel.hidden-panel{display:none;}
-  .tab-panel.slide-in{animation:slideIn .4s cubic-bezier(.22,1,.36,1);}
-  @keyframes slideIn{
-    from{opacity:0; transform:translateX(1rem);}
-    to{opacity:1; transform:translateX(0);}
+  .tab-panel.focus-out{animation:focusOut .32s cubic-bezier(.4,0,.7,.3) forwards;}
+  .tab-panel.focus-in{animation:focusIn .5s cubic-bezier(.16,1,.3,1);}
+  @keyframes focusOut{
+    from{opacity:1; filter:blur(0); transform:scale(1) translateY(0);}
+    to{opacity:0; filter:blur(7px); transform:scale(0.97) translateY(-0.4rem);}
+  }
+  @keyframes focusIn{
+    from{opacity:0; filter:blur(7px); transform:scale(0.97) translateY(0.4rem);}
+    to{opacity:1; filter:blur(0); transform:scale(1) translateY(0);}
   }
   #work{padding-bottom:3.5rem;}
   #experience{padding-bottom:3.5rem;}
@@ -219,16 +224,42 @@
   }
 
   /* About */
-  #about p{
+  #about > p{
     max-width:54ch;
     margin:0 0 0.875rem;
   }
-  #about p:last-child{margin-bottom:0;}
-  #about .skills-line{
+  #about > p:last-child{margin-bottom:0;}
+
+  .about-sub{
+    margin-top:1.75rem;
+    padding-top:1.25rem;
+    border-top:1px solid var(--border);
+  }
+  .sub-label{
+    font-size:0.75rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--text-muted);
+    margin:0 0 0.5rem;
+  }
+  .lang-line{
     font-size:0.875rem;
     color:var(--text-muted);
+    margin:0;
   }
-  #about .skills-line b{color:var(--text);font-weight:600;}
+  .skill-row{
+    font-size:0.875rem;
+    color:var(--text-muted);
+    margin:0 0 0.5rem;
+    display:block;
+  }
+  .skill-row:last-child{margin-bottom:0;}
+  .skill-row b{
+    display:inline-block;
+    min-width:6rem;
+    color:var(--text);
+    font-weight:600;
+  }
 
   .edu-row{
     display:flex;
@@ -237,7 +268,8 @@
     font-size:0.875rem;
     padding:0.5rem 0;
   }
-  .edu-row .school{color:var(--text-muted);}
+  .edu-row .title{font-weight:600;}
+  .edu-row .school{color:var(--text-muted);font-size:0.8125rem;margin-top:0.125rem;}
   .edu-row .yr{
     font-size:0.78125rem;
     color:var(--text-muted);
@@ -283,7 +315,6 @@
   </nav>
 
   <section id="work" class="tab-panel hover-list">
-    <p class="section-title">Work</p>
     <a class="row row-compact" href="#" target="_blank" rel="noopener">
       <span class="title">BomaOS Console</span>
       <span class="year">2026</span>
@@ -311,7 +342,6 @@
   </section>
 
   <section id="experience" class="tab-panel hidden-panel">
-    <p class="section-title">Experience</p>
     <div class="row">
       <div>
         <div class="title">Software &amp; Design Engineer</div>
@@ -336,7 +366,6 @@
   </section>
 
   <section id="about" class="tab-panel hidden-panel">
-    <p class="section-title">About</p>
     <p>
       Currently at Tajji, helping shape the future of real estate in Africa — building design
       systems, apps, the website, and onboarding flows.
@@ -347,20 +376,40 @@
     <p>
       Beyond work, I like to draw, read philosophy, and review films.
     </p>
-    <p>
-      BSc Computer Science, Moi University (2018–2023). Completing the UX Design pathway
-      with IBM SkillsBuild. Based in Eldoret, Kenya — Swahili and English.
-    </p>
-    <p class="skills-line">
-      <b>Languages</b> Kotlin, Java, TypeScript, Swift, SQL &nbsp;·&nbsp;
-      <b>Backend</b> Spring Boot, PostgreSQL, Docker, Kubernetes &nbsp;·&nbsp;
-      <b>Frontend</b> React, Next.js, SvelteKit, Tailwind &nbsp;·&nbsp;
-      <b>Design</b> Figma, design systems, prototyping, accessibility
-    </p>
+
+    <div class="about-sub">
+      <p class="sub-label">Education</p>
+      <div class="edu-row">
+        <div>
+          <div class="title">BSc Computer Science</div>
+          <div class="school">Moi University, Eldoret</div>
+        </div>
+        <div class="yr">2018–2023</div>
+      </div>
+      <div class="edu-row">
+        <div>
+          <div class="title">UX Design Pathway</div>
+          <div class="school">IBM SkillsBuild, Nairobi</div>
+        </div>
+        <div class="yr">2026–Now</div>
+      </div>
+    </div>
+
+    <div class="about-sub">
+      <p class="sub-label">Languages</p>
+      <p class="lang-line">Swahili — native &nbsp;·&nbsp; English — fluent</p>
+    </div>
+
+    <div class="about-sub">
+      <p class="sub-label">Skills</p>
+      <p class="skill-row"><b>Programming</b> Kotlin, Java, TypeScript, Swift, SQL</p>
+      <p class="skill-row"><b>Backend</b> Spring Boot, PostgreSQL, Docker, Kubernetes</p>
+      <p class="skill-row"><b>Frontend</b> React, Next.js, SvelteKit, Tailwind</p>
+      <p class="skill-row"><b>Design</b> Figma, design systems, prototyping, accessibility</p>
+    </div>
   </section>
 
   <section id="contact" class="tab-panel hidden-panel">
-    <p class="section-title">Contact</p>
     <a class="row" href="mailto:dev.kambi@gmail.com">
       <div class="title">Email</div>
       <div class="year">dev.kambi@gmail.com</div>
@@ -426,28 +475,47 @@
     });
   });
 
-  // Tabbed nav: one panel visible at a time, sliding in on switch
+  // Tabbed nav: one panel visible at a time.
+  // Current panel drifts back and blurs out of focus, then the new panel
+  // arrives blurred and sharpens into focus — a camera-style focus pull.
   const navLinks = document.querySelectorAll('nav.site a[data-tab]');
   const panels = document.querySelectorAll('.tab-panel');
+  const EXIT_MS = 320;
+  let switching = false;
+
+  function showPanel(targetId) {
+    panels.forEach((panel) => {
+      panel.classList.remove('focus-out', 'focus-in');
+      if (panel.id === targetId) {
+        panel.classList.remove('hidden-panel');
+        void panel.offsetWidth; // restart animation
+        panel.classList.add('focus-in');
+      } else {
+        panel.classList.add('hidden-panel');
+      }
+    });
+  }
 
   navLinks.forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const targetId = link.dataset.tab;
-      if (link.classList.contains('active')) return;
+      if (switching || link.classList.contains('active')) return;
 
+      const current = document.querySelector('.tab-panel:not(.hidden-panel)');
+      switching = true;
       navLinks.forEach((l) => l.classList.toggle('active', l === link));
 
-      panels.forEach((panel) => {
-        if (panel.id === targetId) {
-          panel.classList.remove('hidden-panel', 'slide-in');
-          void panel.offsetWidth; // restart animation
-          panel.classList.add('slide-in');
-        } else {
-          panel.classList.add('hidden-panel');
-          panel.classList.remove('slide-in');
-        }
-      });
+      if (current) {
+        current.classList.add('focus-out');
+        setTimeout(() => {
+          showPanel(targetId);
+          switching = false;
+        }, EXIT_MS);
+      } else {
+        showPanel(targetId);
+        switching = false;
+      }
     });
   });
   // Live clock — Victor's local time, Africa/Nairobi (UTC+3)
@@ -459,7 +527,7 @@
     hour12: true,
   });
   function updateClock() {
-    timeEl.textContent = `${clockFormatter.format(new Date())} UTC-3`;
+    timeEl.textContent = `${clockFormatter.format(new Date())} UTC3`;
   }
   updateClock();
   setInterval(updateClock, 1000);
