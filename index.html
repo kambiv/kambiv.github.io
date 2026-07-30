@@ -90,8 +90,24 @@
     color:var(--text-muted);
     margin:0 0 1.75rem;
   }
-  .role a{color:var(--accent);border-bottom:1px solid var(--accent-soft);}
-  .role a:hover{border-bottom-color:var(--accent);}
+  .role a, #about > p a{color:rgba(0,0,0,.73);position:relative;z-index:1;transition:color .15s ease;text-decoration:underline;text-decoration-color:rgba(0,0,0,.25);text-underline-offset:3px;text-decoration-thickness:1.5px;}
+  html.dark .role a, html.dark #about > p a{color:rgba(255,255,255,.73);text-decoration-color:rgba(255,255,255,.25);}
+  .role a::before, #about > p a::before{
+    content:'';
+    position:absolute;
+    inset:-0.125rem -0.25rem;
+    background:var(--bg-elevated);
+    border-radius:0.375rem;
+    border:1px solid var(--border);
+    box-shadow:0 4px 16px rgba(0,0,0,.10),0 1px 3px rgba(0,0,0,.08);
+    opacity:0;
+    z-index:-1;
+    transition:opacity .2s ease;
+    pointer-events:none;
+  }
+  html.dark .role a::before, html.dark #about > p a::before{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 4px 18px rgba(0,0,0,.55);}
+  .role a:hover, #about > p a:hover{color:var(--accent);text-decoration:none;}
+  .role a:hover::before, #about > p a:hover::before{opacity:1;}
 
   /* Nav row */
   nav.site{
@@ -278,14 +294,15 @@
     font-size:0.875rem;
   }
   .lang-dot{color:var(--text-muted);}
-  .skills-line{
+  .skills-list{
     font-size:0.875rem;
     font-weight:500;
     color:var(--text-muted);
     margin:0;
     line-height:1.9;
+    text-wrap:pretty;
   }
-  .skills-line b{color:var(--text);font-weight:500;}
+  .skill-key{color:var(--text);font-weight:500;}
 
   .edu-row{
     display:flex;
@@ -312,11 +329,11 @@
     font-weight:500;
     color:var(--text-muted);
     display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:1rem;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:0;
   }
-  #local-time{font-variant-numeric:tabular-nums;font-size:0.75rem;}
+  #local-time{font-variant-numeric:tabular-nums;}
 
   @media (prefers-reduced-motion: reduce){
     *{transition:none !important;animation:none !important;}
@@ -329,7 +346,7 @@
 
   <div class="identity">
     <p class="name">Victor Kambi</p>
-    <p class="role">Design &amp; Engineering at <a href="#work">Tajji Real Estate</a></p>
+    <p class="role">Design &amp; Engineering at <a href="https://tajji.io/" target="_blank" rel="noopener">Tajji</a></p>
   </div>
 
   <nav class="site">
@@ -369,15 +386,15 @@
 
   <section id="about" class="tab-panel hidden-panel">
     <p>
-      Currently at Tajji, building the backend, design system, and product experience for
+      Currently at <a href="https://tajji.io/" target="_blank" rel="noopener">Tajji</a>, building the backend, design system, and product experience for
       a real estate platform reshaping property management across Africa.
     </p>
     <p>
-      Previously at Emmerce, shipping responsive websites and ad campaigns for toy, pet,
+      Previously at <a href="https://emmerce.io/" target="_blank" rel="noopener">Emmerce</a>, shipping responsive websites and ad campaigns for toy, pet,
       and eyewear brands.
     </p>
     <p>
-      Beyond work: drawing, philosophy, and film.
+      Beyond work, I like to read philosophy, draw and review films.
     </p>
 
     <div class="about-sub">
@@ -385,14 +402,14 @@
       <div class="row">
         <div>
           <div class="title">Software &amp; Design Engineer</div>
-          <div class="meta">Tajji Real Estate Ltd, Eldoret</div>
+          <div class="meta">Tajji Ltd, Eldoret</div>
         </div>
         <div class="year">2024–Now</div>
       </div>
       <div class="row">
         <div>
           <div class="title">Frontend Engineer &amp; Junior Designer</div>
-          <div class="meta">Tajji Real Estate Ltd, Nairobi</div>
+          <div class="meta">Tajji Ltd, Nairobi</div>
         </div>
         <div class="year">2023–2024</div>
       </div>
@@ -434,16 +451,16 @@
 
     <div class="about-sub">
       <p class="sub-label">Skills</p>
-      <p class="skills-line">
-        <b>Programming</b> Kotlin, Java, TypeScript, Swift, SQL &nbsp;·&nbsp;
-        <b>Design</b> Figma, Affinity, Miro, Framer, design systems, prototyping, accessibility &nbsp;·&nbsp;
-        <b>Backend</b> Spring Boot, Node.js, Temporal, PostgreSQL, Docker, Kubernetes &nbsp;·&nbsp;
-        <b>Frontend</b> React, Next.js, Vue.js, SvelteKit, Tailwind
-      </p>
+      <div class="skills-list">
+        <div><span class="skill-key">Programming</span>: Kotlin, Kotlin Multiplatform, Compose Multiplatform, Java, TypeScript, JavaScript, Swift, SQL</div>
+        <div><span class="skill-key">Design</span>: Figma, Affinity, Miro, Framer, Editorial Design, Design Systems, Prototyping, Accessibility</div>
+        <div><span class="skill-key">Backend</span>: Spring Boot, Node.js, Temporal, PostgreSQL, Redis, Docker, Kubernetes, OIDC, OAuth2</div>
+        <div><span class="skill-key">Frontend</span>: React, Next.js, Vue.js, SvelteKit, Tailwind</div>
+      </div>
     </div>
   </section>
 
-  <section id="contact" class="tab-panel hidden-panel">
+  <section id="contact" class="tab-panel hidden-panel hover-list">
     <a class="row" href="mailto:dev.kambi@gmail.com">
       <div class="title">Email</div>
       <div class="year">dev.kambi@gmail.com</div>
@@ -459,7 +476,7 @@
   </section>
 
   <footer>
-    <div>© 2026 Victor Kambi</div>
+    <div>Cultivate diligently</div>
     <div id="local-time"></div>
   </footer>
 
